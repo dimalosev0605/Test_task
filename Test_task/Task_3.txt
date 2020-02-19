@@ -1,0 +1,21 @@
+== ЗАДАЧА 3 (SQL) ==
+
+Имеется table_1(id, value) и table_2(id, value) с однородными, местами дублирующими данными.
+Необходимо:
+ 1.Написать SQL скрипт создания таблицы table3(id, value)
+ 2.Написать SQL скрипт наполняющий созданную таблицу данными по следующим правилам:
+	 - все записи из table1, которых нет в table2 поместить в table3
+	 - все записи из table2, которых нет в table1 поместить в table3
+
+Пусть тип "value" будет: VARCHAR (50) NOT NULL
+1.
+create table table_3(
+id serial PRIMARY KEY,
+value VARCHAR (50) NOT NULL
+);
+
+2.
+insert into table_3 (value)
+(select coalesce(table_1.value, table_2.value) from table_1
+FULL JOIN table_2 on table_1.value = table_2.value
+where table_1.id IS NULL or table_2.id IS NULL);
